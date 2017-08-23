@@ -14,6 +14,7 @@ module.exports = function(controller) {
     controller.hears(["today comic"], 'direct_message,direct_mention', function(bot, message) {
       
       bot.startConversation(message, function(err, convo) {
+        console.log('convo', convo);
         var today = new Date();
         var year = today.getFullYear();
         var month = today.getMonth() + 1
@@ -27,7 +28,10 @@ module.exports = function(controller) {
         axios.get(url).then(response => {
           var $ = cheerio.load(response.data);
           var comicUrl = $('.img-comic').attr('src');
-          convo.say(comicUrl);
+          bot.reply(message, {files: [`${comicUrl}.png`]});
+          // convo.say(`<@unfurl> ${comicUrl}`);
+          // convo.say(message);
+          convo.next();
         });
       });
       
@@ -44,6 +48,7 @@ module.exports = function(controller) {
               axios.get(url).then(response => {
                 var $ = cheerio.load(response.data);
                 var comicUrl = $('.img-comic').attr('src');
+
                 convo.say(comicUrl);
                 convo.next();
               });
