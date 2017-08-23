@@ -9,31 +9,29 @@ through the conversation are chosen based on the user's response.
 
 */
 
+var axios = require('axios');
+var cheerio = require('cheerio');
+
 module.exports = function(controller) {
 
     controller.hears(["today comic"], 'direct_message,direct_mention', function(bot, message) {
       
-      bot.startConversation(message, function(err, convo) {
-        console.log('convo', convo);
-        var today = new Date();
-        var year = today.getFullYear();
-        var month = today.getMonth() + 1
-        month = month < 10 ? `0${month}`: month;
-        var day = today.getDate();
-        day = day < 10 ? `0${day}`: day;
-        var date = `${year}-${month}-${day}`;
-        var url = `http://dilbert.com/strip/${date}`
-        var axios = require('axios');
-        var cheerio = require('cheerio');
-        axios.get(url).then(response => {
-          var $ = cheerio.load(response.data);
-          var comicUrl = $('.img-comic').attr('src');
-          bot.reply(message, {files: [`${comicUrl}.png`]});
-          // convo.say(`<@unfurl> ${comicUrl}`);
-          // convo.say(message);
-          convo.next();
+        bot.startConversation(message, function(err, convo) {
+            var today = new Date();
+            var year = today.getFullYear();
+            var month = today.getMonth() + 1
+            month = month < 10 ? `0${month}`: month;
+            var day = today.getDate();
+            day = day < 10 ? `0${day}`: day;
+            var date = `${year}-${month}-${day}`;
+            var url = `http://dilbert.com/strip/${date}`
+            axios.get(url).then(response => {
+                var $ = cheerio.load(response.data);
+                var comicUrl = $('.img-comic').attr('src');
+                bot.reply(message, {files: [`${comicUrl}.png`]});
+                convo.next();
+            });
         });
-      });
       
     });
 
@@ -42,18 +40,15 @@ module.exports = function(controller) {
         bot.startConversation(message, function(err, convo) {
 
             convo.ask('Tell me a date in the this format: yyyy-mm-dd', function(response, convo) {
-              var url = `http://dilbert.com/strip/${response.text}`
-              var axios = require('axios');
-              var cheerio = require('cheerio');
-              axios.get(url).then(response => {
-                var $ = cheerio.load(response.data);
-                var comicUrl = $('.img-comic').attr('src');
-
-                convo.say(comicUrl);
-                convo.next();
-              });
-
+                var url = `http://dilbert.com/strip/${response.text}`
+                axios.get(url).then(response => {
+                    var $ = cheerio.load(response.data);
+                    var comicUrl = $('.img-comic').attr('src');
+                    bot.reply(message, {files: [`${comicUrl}.png`]});
+                    convo.next();
+                });
             });
+
         });
 
     });
@@ -65,7 +60,7 @@ module.exports = function(controller) {
 
             // create a path for when a user says YES
             convo.addMessage({
-                    text: 'How wonderful.',
+                text: 'How wonderful.',
             },'yes_thread');
 
             // create a path for when a user says NO
