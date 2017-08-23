@@ -4,6 +4,7 @@ var querystring = require('querystring');
 var debug = require('debug')('botkit:webserver');
 var nunjucks = require('nunjucks');
 var axios = require('axios');
+var cheerio = require('cheerio');
 
 module.exports = function(controller, bot) {
 
@@ -31,8 +32,6 @@ module.exports = function(controller, bot) {
         day = day < 10 ? `0${day}`: day;
         var date = `${year}-${month}-${day}`;
         var url = `http://dilbert.com/strip/${date}`
-        var axios = require('axios');
-        var cheerio = require('cheerio');
         axios.get(url).then(function(response) {
           var $ = cheerio.load(response.data);
           var comicUrl = $('.img-comic').attr('src');
