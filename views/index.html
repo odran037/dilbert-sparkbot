@@ -1,21 +1,44 @@
 <!doctype html>
 <html>
     <head>
-        <title>Dilbert SparkBot</title>
-        <meta name="description" content="A cool thing made with Glitch">
-        <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="A cool thing made with Glitch">
+        <title>Dilbert SparkBot</title>
+        <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
         <link rel="stylesheet" href="/styles.css" />
     </head>
     <body>
         <div class="wrapper">
             <div>
                 <h1>Dilbert SparkBot</h1>
-                <img src="{{comicUrl}}" alt="Dilbert" width="{{width}}">
+                <a href="/random">
+                    <img src="{{comicUrl}}" alt="Dilbert" width="{{width}}">
+                </a>
                 <hr/>
+                <p id="interval"></p>
             </div>
         </div>
+        <script>
+          if (window.location.pathname === '/random') {
+            var e = document.getElementById('interval');
+
+            function counter(i) {
+              setTimeout(function() {
+                e.innerText = `New comic in ${9 - i}`;
+              }, i * 1000);
+
+            }
+
+            for (var i = 0; i < 10; i++) {
+              counter(i);
+            }
+
+            setTimeout(function() {
+              location.reload();
+            }, 9000);            
+          }
+        </script>
     </body>
 </html>
