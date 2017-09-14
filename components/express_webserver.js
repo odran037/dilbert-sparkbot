@@ -37,8 +37,39 @@ module.exports = function(controller, bot) {
           var comicUrl = $('.img-comic').attr('src');
           res.render('index.html', {width: '100%', comicUrl: comicUrl});
         }).catch(function() {
+          console.log('Axios error', arguments);
           res.render('index.html', {width: '50%', comicUrl: 'https://i.pinimg.com/736x/7a/8f/08/7a8f086911815b2d7b5c0383e61f25be.jpg'});
         });
+    });
+  
+    webserver.get('/random', function(req, res) {      
+        function randomDate(start, end) {
+          var options = {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+          };
+
+          var d = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
+          var year = d.getFullYear()
+          var month = d.getMonth();
+          month = month < 10 ? `0${month}`: month;
+          var day = d.getDate();
+          day = day < 10 ? `0${day}`: day;
+          return `${year}-${month}-${day}`;
+        }
+
+        var date = randomDate(new Date(1989, 3, 16), new Date());
+        var url = `http://dilbert.com/strip/${date}`
+        axios.get(url).then(function(response) {
+          var $ = cheerio.load(response.data);
+          var comicUrl = $('.img-comic').attr('src');
+          res.render('index.html', {width: '100%', comicUrl: comicUrl});
+        }).catch(function() {
+          console.log('Axios error', arguments);
+          res.render('index.html', {width: '50%', comicUrl: 'https://i.pinimg.com/736x/7a/8f/08/7a8f086911815b2d7b5c0383e61f25be.jpg'});
+        });
+
     });
 
     webserver.use(express.static('public'));

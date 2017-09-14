@@ -13,6 +13,37 @@ var axios = require('axios');
 var cheerio = require('cheerio');
 
 module.exports = function(controller) {
+  
+    controller.hears(["random"], 'direct_message,direct_mention', function(bot, message) {
+      
+        bot.startConversation(message, function(err, convo) {
+            function randomDate(start, end) {
+              var options = {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+              };
+
+              var d = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
+              var year = d.getFullYear()
+              var month = d.getMonth();
+              month = month < 10 ? `0${month}`: month;
+              var day = d.getDate();
+              day = day < 10 ? `0${day}`: day;
+              return `${year}-${month}-${day}`;
+            }
+
+            var date = randomDate(new Date(1989, 3, 16), new Date());
+            var url = `http://dilbert.com/strip/${date}`
+            axios.get(url).then(response => {
+                var $ = cheerio.load(response.data);
+                var comicUrl = $('.img-comic').attr('src');
+                bot.reply(message, {files: [`${comicUrl}.png`]});
+                convo.next();
+            });
+        });
+      
+    });
 
     controller.hears(["today comic"], 'direct_message,direct_mention', function(bot, message) {
       
