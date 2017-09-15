@@ -1,7 +1,7 @@
 {
-  "name": "botkit-starter-ciscospark",
+  "name": "dilbert-cisco-spark-bot",
   "version": "0.0.1",
-  "description": "A starter kit for building a custom Cisco Spark bot with Botkit Studio",
+  "description": "Dilbert Comic Sparkbot built with a starter kit for building a custom Cisco Spark bot with Botkit Studio",
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js"
@@ -23,17 +23,17 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/howdyai/botkit-starter-ciscospark.git"
+    "url": "https://github.com/odran037/dilbert-sparkbot/issues"
   },
   "bugs": {
-    "url": "https://github.com/howdyai/botkit-starter-ciscospark/issues"
+    "url": "https://github.com/odran037/dilbert-sparkbot/issues"
   },
-  "homepage": "https://github.com/howdyai/botkit-starter-ciscospark",
+  "homepage": "https://dilbert-sparkbot.glitch.me",
   "keywords": [
     "bots",
     "chatbots",
     "Cisco Spark"
   ],
-  "author": "ben@howdy.ai",
+  "author": "leonardoprates.com",
   "license": "ISC"
 }
