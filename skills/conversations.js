@@ -13,6 +13,23 @@ var axios = require('axios');
 var cheerio = require('cheerio');
 
 module.exports = function(controller) {
+
+//       controller.hears(["ban"], 'direct_message,direct_mention', function(bot, message) {
+//         var m = message.text.split(' ');
+//         console.log(m.length)
+//         bot.startConversation(message, function(err, convo) {
+//             if (message.text.split(' ')[1] === 'Leo' || message.text.split(' ')[1] === 'Leonardo') {
+//               bot.reply(message, "Nice try! Now you're black listed!");
+//               convo.next();
+//             } else {
+//               bot.reply(message, `${message.text.split(' ')[1]} We've got a burn notice on you. You're black listed!`);
+//               convo.next();
+//             }
+//         });
+      
+//     });
+
+
   
     controller.hears(["random"], 'direct_message,direct_mention', function(bot, message) {
       
@@ -45,9 +62,41 @@ module.exports = function(controller) {
       
     });
 
-    controller.hears(["today comic"], 'direct_message,direct_mention', function(bot, message) {
+//     controller.hears(["today comic"], 'direct_message,direct_mention', function(bot, message) {
       
+//         bot.startConversation(message, function(err, convo) {
+//             var today = new Date();
+//             var year = today.getFullYear();
+//             var month = today.getMonth() + 1
+//             month = month < 10 ? `0${month}`: month;
+//             var day = today.getDate();
+//             day = day < 10 ? `0${day}`: day;
+//             var date = `${year}-${month}-${day}`;
+//             var url = `http://dilbert.com/strip/${date}`
+//             axios.get(url).then(response => {
+//                 var $ = cheerio.load(response.data);
+//                 var comicUrl = $('.img-comic').attr('src');
+//                 bot.reply(message, {files: [`${comicUrl}.png`]});
+//                 convo.next();
+//             });
+//         });
+      
+//     });
+
+    controller.hears(['comic'], 'direct_message,direct_mention', function(bot, message) {
+
         bot.startConversation(message, function(err, convo) {
+          
+          var m = message.text.split(' ');
+          if (m.length > 1) {
+              var url = `http://dilbert.com/strip/${m[1]}`
+              axios.get(url).then(response => {
+                  var $ = cheerio.load(response.data);
+                  var comicUrl = $('.img-comic').attr('src');
+                  bot.reply(message, {files: [`${comicUrl}.png`]});
+                  convo.next();
+              });
+          } else {
             var today = new Date();
             var year = today.getFullYear();
             var month = today.getMonth() + 1
@@ -62,23 +111,17 @@ module.exports = function(controller) {
                 bot.reply(message, {files: [`${comicUrl}.png`]});
                 convo.next();
             });
-        });
-      
-    });
+          }
 
-    controller.hears(['comic'], 'direct_message,direct_mention', function(bot, message) {
-
-        bot.startConversation(message, function(err, convo) {
-
-            convo.ask('Tell me a date in the this format: yyyy-mm-dd', function(response, convo) {
-                var url = `http://dilbert.com/strip/${response.text}`
-                axios.get(url).then(response => {
-                    var $ = cheerio.load(response.data);
-                    var comicUrl = $('.img-comic').attr('src');
-                    bot.reply(message, {files: [`${comicUrl}.png`]});
-                    convo.next();
-                });
-            });
+            // convo.ask('Tell me a date in the this format: yyyy-mm-dd', function(response, convo) {
+            //     var url = `http://dilbert.com/strip/${response.text}`
+            //     axios.get(url).then(response => {
+            //         var $ = cheerio.load(response.data);
+            //         var comicUrl = $('.img-comic').attr('src');
+            //         bot.reply(message, {files: [`${comicUrl}.png`]});
+            //         convo.next();
+            //     });
+            // });
 
         });
 
